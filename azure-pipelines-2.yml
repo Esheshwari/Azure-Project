@@ -1,0 +1,28 @@
+trigger:
+- main  # Runs on main branch
+
+pool:
+  vmImage: 'ubuntu-latest'  # Use Ubuntu for the build
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '16.x'  # Node.js version
+
+- script: |
+    echo "Installing dependencies..."
+    npm install
+    echo "Running tests..."
+    npm test
+  displayName: 'Install & Test'
+
+- script: |
+    echo "Building project..."
+    npm run build
+  displayName: 'Build Project'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: 'dist'
+    artifactName: 'drop'
+  displayName: 'Publish Build Artifacts'
